@@ -1,0 +1,106 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Premium silver gradient -->
+    <linearGradient id="silverMain" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5f5f5" />
+      <stop offset="20%" stop-color="#e0e0e0" />
+      <stop offset="40%" stop-color="#c0c0c0" />
+      <stop offset="60%" stop-color="#d4d4d4" />
+      <stop offset="80%" stop-color="#b8b8b8" />
+      <stop offset="100%" stop-color="#a0a0a0" />
+    </linearGradient>
+    
+    <!-- Darker silver for depth -->
+    <linearGradient id="silverDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a8a8a8" />
+      <stop offset="50%" stop-color="#888888" />
+      <stop offset="100%" stop-color="#707070" />
+    </linearGradient>
+    
+    <!-- Gold accent gradient -->
+    <linearGradient id="goldLuxury" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f4d03f" />
+      <stop offset="25%" stop-color="#d4a84b" />
+      <stop offset="50%" stop-color="#b8860b" />
+      <stop offset="75%" stop-color="#c9a227" />
+      <stop offset="100%" stop-color="#8b6914" />
+    </linearGradient>
+    
+    <!-- Shine effect -->
+    <linearGradient id="shineEffect" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="white" stop-opacity="0" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="white" stop-opacity="0" />
+    </linearGradient>
+    
+    <!-- Drop shadow filter -->
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  
+  <!-- Main diamond shape - outer -->
+  <path
+    d="M32 4L58 32L32 60L6 32L32 4Z"
+    fill="url(#silverMain)"
+    filter="url(#dropShadow)"
+  />
+  
+  <!-- Diamond facet - top left -->
+  <path
+    d="M32 4L6 32L32 28L32 4Z"
+    fill="url(#silverDark)"
+    opacity="0.4"
+  />
+  
+  <!-- Diamond facet - bottom right -->
+  <path
+    d="M32 60L58 32L32 36L32 60Z"
+    fill="url(#silverDark)"
+    opacity="0.3"
+  />
+  
+  <!-- Inner diamond border -->
+  <path
+    d="M32 12L50 32L32 52L14 32L32 12Z"
+    fill="none"
+    stroke="url(#goldLuxury)"
+    stroke-width="1.5"
+  />
+  
+  <!-- Stylized "S" for Sterling - elegant script form -->
+  <path
+    d="M26 24C26 24 28 20 32 20C36 20 38 23 38 26C38 29 35 30 32 31C29 32 26 33 26 36C26 40 29 42 32 42C36 42 38 40 38 40"
+    fill="none"
+    stroke="url(#goldLuxury)"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  
+  <!-- "925" text - small, elegant placement at bottom -->
+  <text
+    x="32"
+    y="56"
+    text-anchor="middle"
+    font-size="7"
+    font-weight="600"
+    fill="url(#goldLuxury)"
+    letter-spacing="0.5"
+    font-family="serif"
+  >925</text>
+  
+  <!-- Shine highlight on diamond -->
+  <path
+    d="M20 20L32 12L44 20"
+    fill="none"
+    stroke="url(#shineEffect)"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+  
+  <!-- Small sparkle accents -->
+  <circle cx="46" cy="18" r="1.5" fill="white" opacity="0.9" />
+  <circle cx="18" cy="46" r="1" fill="#d4a84b" opacity="0.7" />
+  <circle cx="44" cy="44" r="0.8" fill="white" opacity="0.6" />
+</svg>
