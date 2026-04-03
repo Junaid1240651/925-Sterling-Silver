@@ -10,7 +10,7 @@ function AuthPageLayoutComponent({ children }: AuthPageLayoutProps) {
       className="min-h-screen flex flex-col"
       style={{ backgroundColor: "var(--color-bg-primary)" }}
     >
-      <div className="flex-1 flex items-center justify-center px-4 pb-12 sm:pb-16">
+      <div className="flex-1 flex items-center justify-center px-4">
         {children}
       </div>
     </div>
