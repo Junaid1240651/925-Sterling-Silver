@@ -11,6 +11,11 @@ type Step = "email" | "reset";
 
 const RESEND_SECONDS = 60;
 
+function isValidEmailFormat(value: string): boolean {
+  if (!value || value.length > 254) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 export function ForgotPasswordPage() {
   const { user } = useAuth();
   const [step, setStep] = useState<Step>("email");
@@ -40,18 +45,31 @@ export function ForgotPasswordPage() {
     setError(null);
     setInfo(null);
     setGoogleOnlyAccount(false);
+    const trimmed = email.trim().toLowerCase();
+    if (!trimmed) {
+      setError("Email is required.");
+      return;
+    }
+    if (!isValidEmailFormat(trimmed)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
     setLoading(true);
     try {
       const res = await apiFetch<{
         message: string;
+        codeSent: boolean;
         flow?: "google_only";
       }>("/api/auth/password/forgot/send-otp", {
         method: "POST",
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ email: trimmed }),
       });
       setInfo(res.message);
       if (res.flow === "google_only") {
         setGoogleOnlyAccount(true);
+        return;
+      }
+      if (!res.codeSent) {
         return;
       }
       setStep("reset");
@@ -82,7 +100,7 @@ export function ForgotPasswordPage() {
         {
           method: "POST",
           body: JSON.stringify({
-            email: email.trim(),
+            email: email.trim().toLowerCase(),
             code,
             newPassword,
           }),
@@ -196,8 +214,10 @@ export function ForgotPasswordPage() {
                 <input
                   id="forgot-email"
                   type="email"
+                  inputMode="email"
                   autoComplete="email"
                   required
+                  maxLength={254}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-3 py-2.5 rounded-md border text-sm"
