@@ -223,17 +223,6 @@ function HeaderComponent() {
                           >
                             {user.email}
                           </p>
-                          {user.passwordLoginEnabled === false && (
-                            <p
-                              className="text-[11px] leading-snug mt-2 pt-2 border-t"
-                              style={{
-                                color: "var(--color-text-muted)",
-                                borderColor: "var(--color-border-light)",
-                              }}
-                            >
-                              You’re signed in with Google. There’s no password on this account—use Google next time, or contact us if you want to add email login.
-                            </p>
-                          )}
                         </div>
                         <button
                           type="button"
