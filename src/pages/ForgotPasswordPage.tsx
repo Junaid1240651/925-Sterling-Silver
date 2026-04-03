@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, type FormEvent } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { AuthPasswordInput } from "../components/auth/AuthPasswordInput";
 import { AuthPageLayout } from "../components/layout/AuthPageLayout";
 import { Container } from "../components/ui/Container";
 import { useAuth } from "../context/AuthContext";
@@ -235,52 +236,22 @@ export function ForgotPasswordPage() {
                   }}
                 />
               </div>
-              <div>
-                <label
-                  htmlFor="forgot-new"
-                  className="block text-sm font-medium mb-1"
-                  style={{ color: "var(--color-text-secondary)" }}
-                >
-                  New password
-                </label>
-                <input
-                  id="forgot-new"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  minLength={6}
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-md border text-sm"
-                  style={{
-                    borderColor: "var(--color-border-medium)",
-                    backgroundColor: "var(--color-bg-white)",
-                  }}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="forgot-confirm"
-                  className="block text-sm font-medium mb-1"
-                  style={{ color: "var(--color-text-secondary)" }}
-                >
-                  Confirm new password
-                </label>
-                <input
-                  id="forgot-confirm"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  minLength={6}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-md border text-sm"
-                  style={{
-                    borderColor: "var(--color-border-medium)",
-                    backgroundColor: "var(--color-bg-white)",
-                  }}
-                />
-              </div>
+              <AuthPasswordInput
+                id="forgot-new"
+                label="New password"
+                value={newPassword}
+                onChange={setNewPassword}
+                autoComplete="new-password"
+                minLength={6}
+              />
+              <AuthPasswordInput
+                id="forgot-confirm"
+                label="Confirm new password"
+                value={confirmPassword}
+                onChange={setConfirmPassword}
+                autoComplete="new-password"
+                minLength={6}
+              />
               {error && (
                 <p className="text-sm" style={{ color: "#b91c1c" }}>
                   {error}

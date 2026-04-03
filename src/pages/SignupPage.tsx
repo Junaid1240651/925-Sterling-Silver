@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, type FormEvent } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { AuthPasswordInput } from "../components/auth/AuthPasswordInput";
 import { AuthPageLayout } from "../components/layout/AuthPageLayout";
 import { Container } from "../components/ui/Container";
 import { useAuth, type LoginResponse } from "../context/AuthContext";
@@ -160,35 +161,22 @@ export function SignupPage() {
                     }}
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="signup-password"
-                    className="block text-sm font-medium mb-1"
-                    style={{ color: "var(--color-text-secondary)" }}
-                  >
-                    Password
-                  </label>
-                  <input
-                    id="signup-password"
-                    type="password"
-                    autoComplete="new-password"
-                    required
-                    minLength={6}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-md border text-sm"
-                    style={{
-                      borderColor: "var(--color-border-medium)",
-                      backgroundColor: "var(--color-bg-white)",
-                    }}
-                  />
-                  <p
-                    className="text-xs mt-1"
-                    style={{ color: "var(--color-text-muted)" }}
-                  >
-                    At least 6 characters
-                  </p>
-                </div>
+                <AuthPasswordInput
+                  id="signup-password"
+                  label="Password"
+                  value={password}
+                  onChange={setPassword}
+                  autoComplete="new-password"
+                  minLength={6}
+                  hint={
+                    <p
+                      className="text-xs mt-1"
+                      style={{ color: "var(--color-text-muted)" }}
+                    >
+                      At least 6 characters
+                    </p>
+                  }
+                />
                 {error && (
                   <p className="text-sm" style={{ color: "#b91c1c" }}>
                     {error}

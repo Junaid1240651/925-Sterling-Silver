@@ -31,7 +31,7 @@ function HeaderComponent() {
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const { openModal } = useComingSoon();
-  const { user, isReady, logout } = useAuth();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     if (!profileOpen) return;
@@ -156,8 +156,8 @@ function HeaderComponent() {
               >
                 <Heart size={18} className="md:w-5 md:h-5" />
               </motion.button>
-              {/* Profile / sign in */}
-              {isReady && user ? (
+              {/* Profile or Log in */}
+              {user ? (
                 <div className="relative" ref={profileRef}>
                   <button
                     type="button"
@@ -252,11 +252,16 @@ function HeaderComponent() {
               ) : (
                 <Link
                   to="/login"
-                  className="p-1 sm:p-1.5 md:p-2 rounded-full transition-colors duration-200 cursor-pointer inline-flex"
-                  style={{ color: "var(--color-text-secondary)" }}
-                  aria-label="Sign in"
+                  className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors cursor-pointer border"
+                  style={{
+                    color: "var(--color-text-primary)",
+                    borderColor: "var(--color-border-dark)",
+                    backgroundColor: "transparent",
+                  }}
+                  aria-label="Log in"
                 >
-                  <User size={18} className="sm:w-5 sm:h-5" />
+                  <User size={16} className="sm:w-[18px] sm:h-[18px] shrink-0" />
+                  <span>Log in</span>
                 </Link>
               )}
               {/* Cart - always visible */}
@@ -336,6 +341,17 @@ function HeaderComponent() {
                   <Search size={14} />
                   Search
                 </motion.button>
+                {!user && (
+                  <Link
+                    to="/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-2 w-full py-2 sm:py-2.5 md:py-3 px-2 text-xs sm:text-sm md:text-base font-medium rounded-md transition-colors"
+                    style={{ color: "var(--color-text-secondary)" }}
+                  >
+                    <User size={14} />
+                    Log in
+                  </Link>
+                )}
               </div>
             </Container>
           </motion.nav>

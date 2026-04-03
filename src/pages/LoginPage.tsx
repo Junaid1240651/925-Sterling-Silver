@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { AuthPasswordInput } from "../components/auth/AuthPasswordInput";
 import { AuthPageLayout } from "../components/layout/AuthPageLayout";
 import { Container } from "../components/ui/Container";
 import { useAuth } from "../context/AuthContext";
@@ -96,28 +97,13 @@ export function LoginPage() {
                 }}
               />
             </div>
-            <div>
-              <label
-                htmlFor="login-password"
-                className="block text-sm font-medium mb-1"
-                style={{ color: "var(--color-text-secondary)" }}
-              >
-                Password
-              </label>
-              <input
-                id="login-password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-md border text-sm"
-                style={{
-                  borderColor: "var(--color-border-medium)",
-                  backgroundColor: "var(--color-bg-white)",
-                }}
-              />
-            </div>
+            <AuthPasswordInput
+              id="login-password"
+              label="Password"
+              value={password}
+              onChange={setPassword}
+              autoComplete="current-password"
+            />
             {error && (
               <p className="text-sm" style={{ color: "#b91c1c" }}>
                 {error}
