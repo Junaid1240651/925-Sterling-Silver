@@ -1,9 +1,11 @@
-import { memo, useState, useCallback } from "react";
+import { memo, useState, useCallback, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Search, User, ShoppingBag, Heart } from "lucide-react";
+import { Menu, X, Search, User, ShoppingBag, Heart, LogOut } from "lucide-react";
 import { Container } from "../ui/Container";
 import { Logo } from "../ui/Logo";
 import { useComingSoon } from "../../context/ComingSoonContext";
+import { useAuth } from "../../context/AuthContext";
 
 const navLinks = [
   { id: "new", label: "New Arrivals" },
@@ -14,9 +16,36 @@ const navLinks = [
   { id: "collections", label: "Collections" },
 ];
 
+function profileInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+  const w = parts[0] || "?";
+  return w.slice(0, 2).toUpperCase();
+}
+
 function HeaderComponent() {
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
   const { openModal } = useComingSoon();
+  const { user, isReady, logout } = useAuth();
+
+  useEffect(() => {
+    if (!profileOpen) return;
+    function onDoc(e: MouseEvent) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(e.target as Node)
+      ) {
+        setProfileOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, [profileOpen]);
 
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -72,15 +101,9 @@ function HeaderComponent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <a
-                href="/"
-                className="inline-block cursor-pointer"
-                onClick={(e) => {
-                  e.preventDefault();
-                }}
-              >
+              <Link to="/" className="inline-block cursor-pointer">
                 <Logo size="sm" variant="full" />
-              </a>
+              </Link>
             </motion.div>
 
             {/* Desktop Navigation */}
@@ -133,19 +156,109 @@ function HeaderComponent() {
               >
                 <Heart size={18} className="md:w-5 md:h-5" />
               </motion.button>
-              {/* User - always visible */}
-              <motion.button
-                className="p-1 sm:p-1.5 md:p-2 rounded-full transition-colors duration-200 cursor-pointer"
-                style={{ color: "var(--color-text-secondary)" }}
-                onClick={openModal}
-                whileHover={{
-                  color: "var(--color-text-primary)",
-                  backgroundColor: "var(--color-bg-secondary)",
-                }}
-                aria-label="Account"
-              >
-                <User size={18} className="sm:w-5 sm:h-5" />
-              </motion.button>
+              {/* Profile / sign in */}
+              {isReady && user ? (
+                <div className="relative" ref={profileRef}>
+                  <button
+                    type="button"
+                    onClick={() => setProfileOpen((o) => !o)}
+                    className="p-0.5 sm:p-1 rounded-full transition-colors duration-200 cursor-pointer inline-flex items-center gap-1.5 sm:gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                    style={{
+                      outlineColor: "var(--color-accent)",
+                    }}
+                    aria-expanded={profileOpen}
+                    aria-haspopup="menu"
+                    aria-label={`Account menu, signed in as ${user.name}`}
+                  >
+                    {user.imageUrl ? (
+                      <img
+                        src={user.imageUrl}
+                        alt=""
+                        className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border shrink-0"
+                        style={{ borderColor: "var(--color-border-light)" }}
+                      />
+                    ) : (
+                      <span
+                        className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-semibold shrink-0"
+                        style={{
+                          backgroundColor: "var(--color-bg-secondary)",
+                          color: "var(--color-text-primary)",
+                          border: "1px solid var(--color-border-light)",
+                        }}
+                      >
+                        {profileInitials(user.name)}
+                      </span>
+                    )}
+                    <span className="hidden md:inline text-xs font-medium truncate max-w-[100px] text-left" style={{ color: "var(--color-text-secondary)" }}>
+                      {user.name.split(" ")[0]}
+                    </span>
+                  </button>
+                  <AnimatePresence>
+                    {profileOpen && (
+                      <motion.div
+                        role="menu"
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 top-full mt-2 w-56 sm:w-60 rounded-lg border shadow-lg py-2 z-50"
+                        style={{
+                          backgroundColor: "var(--color-bg-white)",
+                          borderColor: "var(--color-border-light)",
+                          boxShadow: "var(--shadow-lg)",
+                        }}
+                      >
+                        <div
+                          className="px-3 pb-2 mb-1 border-b"
+                          style={{
+                            borderColor: "var(--color-border-light)",
+                          }}
+                        >
+                          <p className="text-sm font-medium truncate" style={{ color: "var(--color-text-primary)" }}>
+                            {user.name}
+                          </p>
+                          <p
+                            className="text-xs truncate mt-0.5"
+                            style={{ color: "var(--color-text-muted)" }}
+                          >
+                            {user.email}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          role="menuitem"
+                          onClick={() => {
+                            logout();
+                            setProfileOpen(false);
+                            navigate("/");
+                          }}
+                          className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-left cursor-pointer transition-colors"
+                          style={{ color: "var(--color-text-secondary)" }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor =
+                              "var(--color-bg-secondary)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                          }}
+                        >
+                          <LogOut size={16} className="shrink-0" aria-hidden />
+                          Log out
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <Link
+                  to="/login"
+                  className="p-1 sm:p-1.5 md:p-2 rounded-full transition-colors duration-200 cursor-pointer inline-flex"
+                  style={{ color: "var(--color-text-secondary)" }}
+                  aria-label="Sign in"
+                >
+                  <User size={18} className="sm:w-5 sm:h-5" />
+                </Link>
+              )}
               {/* Cart - always visible */}
               <motion.button
                 className="p-1 sm:p-1.5 md:p-2 rounded-full transition-colors duration-200 relative cursor-pointer"
