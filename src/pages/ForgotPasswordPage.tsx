@@ -23,6 +23,7 @@ export function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [resendIn, setResendIn] = useState(0);
+  const [googleOnlyAccount, setGoogleOnlyAccount] = useState(false);
 
   const startResendCooldown = useCallback(() => {
     setResendIn(RESEND_SECONDS);
@@ -38,16 +39,21 @@ export function ForgotPasswordPage() {
     e?.preventDefault();
     setError(null);
     setInfo(null);
+    setGoogleOnlyAccount(false);
     setLoading(true);
     try {
-      const res = await apiFetch<{ message: string }>(
-        "/api/auth/password/forgot/send-otp",
-        {
-          method: "POST",
-          body: JSON.stringify({ email: email.trim() }),
-        },
-      );
+      const res = await apiFetch<{
+        message: string;
+        flow?: "google_only";
+      }>("/api/auth/password/forgot/send-otp", {
+        method: "POST",
+        body: JSON.stringify({ email: email.trim() }),
+      });
       setInfo(res.message);
+      if (res.flow === "google_only") {
+        setGoogleOnlyAccount(true);
+        return;
+      }
       setStep("reset");
       setCode("");
       startResendCooldown();
@@ -162,6 +168,21 @@ export function ForgotPasswordPage() {
               : "Enter the code and choose a new password."}
           </p>
 
+          {step === "email" && (
+            <p
+              className="text-xs text-center mb-6 px-1 leading-relaxed rounded-md py-2.5 px-2"
+              style={{
+                backgroundColor: "var(--color-bg-secondary)",
+                color: "var(--color-text-secondary)",
+              }}
+            >
+              <strong className="font-medium" style={{ color: "var(--color-text-primary)" }}>
+                Signed up with Google?
+              </strong>{" "}
+              Use the Google button on the sign-in page. Password reset only works for accounts that use email and password.
+            </p>
+          )}
+
           {step === "email" ? (
             <form onSubmit={sendOtp} className="space-y-4">
               <div>
@@ -186,6 +207,27 @@ export function ForgotPasswordPage() {
                   }}
                 />
               </div>
+              {info && (
+                <div
+                  className="text-sm rounded-md px-3 py-3 leading-relaxed space-y-3"
+                  style={{
+                    backgroundColor: "var(--color-bg-secondary)",
+                    color: "var(--color-text-secondary)",
+                  }}
+                  role="status"
+                >
+                  <p>{info}</p>
+                  {googleOnlyAccount && (
+                    <Link
+                      to="/login"
+                      className="inline-block font-medium underline-offset-2 hover:underline"
+                      style={{ color: "var(--color-accent)" }}
+                    >
+                      Back to sign in (use Google)
+                    </Link>
+                  )}
+                </div>
+              )}
               {error && (
                 <p className="text-sm" style={{ color: "#b91c1c" }}>
                   {error}
@@ -284,6 +326,7 @@ export function ForgotPasswordPage() {
                   setCode("");
                   setError(null);
                   setInfo(null);
+                  setGoogleOnlyAccount(false);
                 }}
                 className="w-full py-2 text-sm"
                 style={{ color: "var(--color-text-muted)" }}

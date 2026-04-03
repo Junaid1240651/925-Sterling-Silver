@@ -19,6 +19,8 @@ export interface AuthUser {
   imageUrl?: string;
   isApproved?: boolean;
   setupStep?: number;
+  /** false = Google-only (no password); forgot password does not apply. */
+  passwordLoginEnabled?: boolean;
 }
 
 interface AuthState {

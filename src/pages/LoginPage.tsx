@@ -166,6 +166,16 @@ export function LoginPage() {
           </a>
 
           <p
+            className="text-center text-xs mt-4 leading-relaxed px-1"
+            style={{ color: "var(--color-text-muted)" }}
+          >
+            <strong className="font-medium" style={{ color: "var(--color-text-secondary)" }}>
+              Google account?
+            </strong>{" "}
+            Sign in with the button above. Forgot password only applies if you created a password with email sign-up.
+          </p>
+
+          <p
             className="text-center text-sm mt-8"
             style={{ color: "var(--color-text-muted)" }}
           >
