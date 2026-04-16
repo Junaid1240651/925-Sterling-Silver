@@ -1,7 +1,21 @@
 import { memo, useState, useCallback, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Search, User, ShoppingBag, Heart, LogOut } from "lucide-react";
+import {
+  Menu,
+  X,
+  Search,
+  User,
+  ShoppingBag,
+  Heart,
+  LogOut,
+  ChevronDown,
+  Package,
+  UserCircle,
+  MapPin,
+  Smartphone,
+  CreditCard,
+} from "lucide-react";
 import { Container } from "../ui/Container";
 import { Logo } from "../ui/Logo";
 import { useComingSoon } from "../../context/ComingSoonContext";
@@ -192,6 +206,12 @@ function HeaderComponent() {
                     <span className="hidden md:inline text-xs font-medium truncate max-w-[100px] text-left" style={{ color: "var(--color-text-secondary)" }}>
                       {user.name.split(" ")[0]}
                     </span>
+                    <ChevronDown
+                      size={14}
+                      className="hidden md:block shrink-0 opacity-60"
+                      style={{ color: "var(--color-text-muted)" }}
+                      aria-hidden
+                    />
                   </button>
                   <AnimatePresence>
                     {profileOpen && (
@@ -201,7 +221,7 @@ function HeaderComponent() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -6 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute right-0 top-full mt-2 w-56 sm:w-60 rounded-lg border shadow-lg py-2 z-50"
+                        className="absolute right-0 top-full mt-2 w-60 sm:w-64 max-h-[min(70vh,28rem)] overflow-y-auto rounded-md border shadow-lg py-2 z-50"
                         style={{
                           backgroundColor: "var(--color-bg-white)",
                           borderColor: "var(--color-border-light)",
@@ -224,6 +244,106 @@ function HeaderComponent() {
                             {user.email}
                           </p>
                         </div>
+                        <p
+                          className="px-3 pt-2 pb-1 text-[10px] font-semibold tracking-wider uppercase"
+                          style={{ color: "var(--color-text-muted)" }}
+                        >
+                          Account
+                        </p>
+                        <Link
+                          to="/account/orders"
+                          role="menuitem"
+                          onClick={() => setProfileOpen(false)}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left cursor-pointer transition-colors"
+                          style={{ color: "var(--color-text-secondary)" }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = "var(--color-bg-secondary)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                          }}
+                        >
+                          <Package size={16} className="shrink-0 opacity-80" aria-hidden />
+                          My orders
+                        </Link>
+                        <Link
+                          to="/account/profile"
+                          role="menuitem"
+                          onClick={() => setProfileOpen(false)}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left cursor-pointer transition-colors"
+                          style={{ color: "var(--color-text-secondary)" }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = "var(--color-bg-secondary)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                          }}
+                        >
+                          <UserCircle size={16} className="shrink-0 opacity-80" aria-hidden />
+                          Profile information
+                        </Link>
+                        <Link
+                          to="/account/addresses"
+                          role="menuitem"
+                          onClick={() => setProfileOpen(false)}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left cursor-pointer transition-colors"
+                          style={{ color: "var(--color-text-secondary)" }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = "var(--color-bg-secondary)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                          }}
+                        >
+                          <MapPin size={16} className="shrink-0 opacity-80" aria-hidden />
+                          Manage addresses
+                        </Link>
+                        <p
+                          className="px-3 pt-2 pb-1 mt-1 border-t text-[10px] font-semibold tracking-wider uppercase"
+                          style={{
+                            color: "var(--color-text-muted)",
+                            borderColor: "var(--color-border-light)",
+                          }}
+                        >
+                          Payments
+                        </p>
+                        <Link
+                          to="/account/payments/upi"
+                          role="menuitem"
+                          onClick={() => setProfileOpen(false)}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left cursor-pointer transition-colors"
+                          style={{ color: "var(--color-text-secondary)" }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = "var(--color-bg-secondary)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                          }}
+                        >
+                          <Smartphone size={16} className="shrink-0 opacity-80" aria-hidden />
+                          Saved UPI
+                        </Link>
+                        <Link
+                          to="/account/payments/cards"
+                          role="menuitem"
+                          onClick={() => setProfileOpen(false)}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left cursor-pointer transition-colors"
+                          style={{ color: "var(--color-text-secondary)" }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = "var(--color-bg-secondary)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                          }}
+                        >
+                          <CreditCard size={16} className="shrink-0 opacity-80" aria-hidden />
+                          Saved cards
+                        </Link>
+                        <div
+                          className="my-2 border-t"
+                          style={{ borderColor: "var(--color-border-light)" }}
+                          aria-hidden
+                        />
                         <button
                           type="button"
                           role="menuitem"
@@ -235,8 +355,7 @@ function HeaderComponent() {
                           className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-left cursor-pointer transition-colors"
                           style={{ color: "var(--color-text-secondary)" }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor =
-                              "var(--color-bg-secondary)";
+                            e.currentTarget.style.backgroundColor = "var(--color-bg-secondary)";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.backgroundColor = "transparent";
@@ -341,7 +460,77 @@ function HeaderComponent() {
                   <Search size={14} />
                   Search
                 </motion.button>
-                {!user && (
+                {user ? (
+                  <>
+                    <div
+                      className="pt-2 mt-2 border-t px-2 text-[10px] font-semibold tracking-wider uppercase"
+                      style={{
+                        borderColor: "var(--color-border-light)",
+                        color: "var(--color-text-muted)",
+                      }}
+                    >
+                      My account
+                    </div>
+                    <Link
+                      to="/account/orders"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center gap-2 w-full py-2 sm:py-2.5 px-2 text-xs sm:text-sm font-medium rounded-md transition-colors"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      <Package size={14} aria-hidden />
+                      My orders
+                    </Link>
+                    <Link
+                      to="/account/profile"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center gap-2 w-full py-2 sm:py-2.5 px-2 text-xs sm:text-sm font-medium rounded-md transition-colors"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      <UserCircle size={14} aria-hidden />
+                      Profile information
+                    </Link>
+                    <Link
+                      to="/account/addresses"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center gap-2 w-full py-2 sm:py-2.5 px-2 text-xs sm:text-sm font-medium rounded-md transition-colors"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      <MapPin size={14} aria-hidden />
+                      Manage addresses
+                    </Link>
+                    <Link
+                      to="/account/payments/upi"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center gap-2 w-full py-2 sm:py-2.5 px-2 text-xs sm:text-sm font-medium rounded-md transition-colors"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      <Smartphone size={14} aria-hidden />
+                      Saved UPI
+                    </Link>
+                    <Link
+                      to="/account/payments/cards"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center gap-2 w-full py-2 sm:py-2.5 px-2 text-xs sm:text-sm font-medium rounded-md transition-colors"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      <CreditCard size={14} aria-hidden />
+                      Saved cards
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        logout();
+                        setIsMobileMenuOpen(false);
+                        navigate("/");
+                      }}
+                      className="flex items-center gap-2 w-full py-2 sm:py-2.5 px-2 text-xs sm:text-sm font-medium rounded-md text-left cursor-pointer"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      <LogOut size={14} aria-hidden />
+                      Log out
+                    </button>
+                  </>
+                ) : (
                   <Link
                     to="/login"
                     onClick={() => setIsMobileMenuOpen(false)}

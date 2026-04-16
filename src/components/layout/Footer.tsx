@@ -1,9 +1,11 @@
 import { memo } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Instagram, Facebook, Twitter, Mail, MapPin, Phone, Shield, Award } from "lucide-react";
 import { Container } from "../ui/Container";
 import { Logo } from "../ui/Logo";
 import { useComingSoon } from "../../context/ComingSoonContext";
+import { PUBLIC_SUPPORT_EMAIL } from "../../lib/contactApi";
 
 const footerLinks = {
   shop: [
@@ -35,6 +37,10 @@ const socialLinks = [
   { Icon: Facebook, label: "Facebook", id: "facebook" },
   { Icon: Twitter, label: "Twitter", id: "twitter" },
 ];
+
+function scrollToContactTop() {
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+}
 
 function FooterComponent() {
   const { openModal } = useComingSoon();
@@ -97,16 +103,12 @@ function FooterComponent() {
             {/* Contact info */}
             <div className="space-y-1.5 sm:space-y-2 md:space-y-3">
               <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  openModal();
-                }}
+                href={`mailto:${PUBLIC_SUPPORT_EMAIL}`}
                 className="flex items-center gap-1.5 sm:gap-2 md:gap-3 text-[10px] sm:text-xs md:text-sm transition-colors duration-200 cursor-pointer hover:text-white"
                 style={{ color: "var(--color-text-muted)" }}
               >
                 <Mail size={12} className="sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
-                hello@925sterlingvibes.in
+                {PUBLIC_SUPPORT_EMAIL}
               </a>
               <a
                 href="#"
@@ -214,17 +216,39 @@ function FooterComponent() {
             <ul className="space-y-2 lg:space-y-3">
               {footerLinks.help.map((link) => (
                 <li key={link.id}>
-                  <button
-                    onClick={openModal}
-                    className="text-xs md:text-sm transition-colors duration-200 hover:text-white cursor-pointer"
-                    style={{ color: "var(--color-text-muted)" }}
-                  >
-                    {link.label}
-                  </button>
+                  {link.id === "contact" ? (
+                    <Link
+                      to="/contact"
+                      onClick={scrollToContactTop}
+                      className="text-xs md:text-sm transition-colors duration-200 hover:text-white cursor-pointer inline-block"
+                      style={{ color: "var(--color-text-muted)" }}
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={openModal}
+                      className="text-xs md:text-sm transition-colors duration-200 hover:text-white cursor-pointer"
+                      style={{ color: "var(--color-text-muted)" }}
+                    >
+                      {link.label}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
           </div>
+        </div>
+
+        <div className="md:hidden pb-4 border-b border-gray-700">
+          <Link
+            to="/contact"
+            onClick={scrollToContactTop}
+            className="text-xs font-medium transition-colors duration-200 hover:text-white"
+            style={{ color: "var(--color-accent)" }}
+          >
+            Contact us & support →
+          </Link>
         </div>
 
         {/* Bottom bar */}
